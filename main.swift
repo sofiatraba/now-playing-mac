@@ -904,15 +904,72 @@ final class AppController: NSObject, NSApplicationDelegate {
         model.art = item.art.flatMap { Artwork(image: cover($0)) }
         model.hovering = item.hovering
 
-        let view = CardView(model: model)
-            .padding(24)
-            .background(Color(white: 0.75))
+        save(
+            CardView(model: model)
+                .shadow(color: .black.opacity(0.35), radius: 14, y: 6)
+                .padding(28),
+            as: item.name
+        )
+    }
+
+    // A made-up desktop showing where the card sits on the screen.
+    let model = NowPlayingModel()
+    model.apply(.reading(Reading(track: track("Song You Just Discovered"), isPlaying: false, position: 83)))
+    model.isPlaying = true
+    model.art = Artwork(image: cover([.systemPink, .systemPurple, .systemIndigo]))
+
+    let lineWidths: [CGFloat] = [420, 470, 380, 450, 300, 0, 440, 400, 460, 240]
+    let documentWindow = VStack(alignment: .leading, spacing: 13) {
+        HStack(spacing: 7) {
+            Circle().fill(Color(red: 1, green: 0.37, blue: 0.34))
+            Circle().fill(Color(red: 1, green: 0.74, blue: 0.18))
+            Circle().fill(Color(red: 0.16, green: 0.78, blue: 0.25))
+        }
+        .frame(width: 54, height: 12)
+        .padding(.bottom, 16)
+        ForEach(lineWidths.indices, id: \.self) { index in
+            Capsule().fill(Color(white: 0.84)).frame(width: lineWidths[index], height: 9)
+        }
+        Spacer(minLength: 0)
+    }
+    .padding(20)
+    .frame(width: 540, height: 340, alignment: .topLeading)
+    .background(
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .fill(Color(white: 0.98))
+            .shadow(color: .black.opacity(0.3), radius: 24, y: 12)
+    )
+
+    let desktop = ZStack(alignment: .topTrailing) {
+        LinearGradient(
+            colors: [
+                Color(red: 0.13, green: 0.17, blue: 0.40),
+                Color(red: 0.52, green: 0.28, blue: 0.56),
+                Color(red: 0.96, green: 0.62, blue: 0.44),
+            ],
+            startPoint: .top, endPoint: .bottom
+        )
+        documentWindow
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+            .padding(.leading, 48)
+            .padding(.bottom, 44)
+        Color.white.opacity(0.2).frame(height: 26).frame(maxHeight: .infinity, alignment: .top)
+        CardView(model: model)
+            .shadow(color: .black.opacity(0.4), radius: 16, y: 8)
+            .padding(.top, 42)
+            .padding(.trailing, 18)
+    }
+    .frame(width: 900, height: 520)
+    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+    save(desktop, as: "desktop")
+
+    func save<V: View>(_ view: V, as name: String) {
         let renderer = ImageRenderer(content: view)
         renderer.scale = 2
         guard let image = renderer.nsImage, let tiff = image.tiffRepresentation,
               let png = NSBitmapImageRep(data: tiff)?.representation(using: .png, properties: [:])
-        else { continue }
-        try? png.write(to: URL(fileURLWithPath: "\(folder)/\(item.name).png"))
+        else { return }
+        try? png.write(to: URL(fileURLWithPath: "\(folder)/\(name).png"))
     }
 }
 
