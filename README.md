@@ -4,7 +4,7 @@ A small floating card for your Mac that shows what's playing in Spotify or Apple
 
 If you're anything like me, you play random public playlists to discover music. I use Spotify as my discovery ground: I search for moods, feelings and types of music and see what comes up. Sometimes a song comes on that I really like, or I just have no idea what I'm listening to, and I want to glance at it without stopping what I'm doing and digging through Spotify. So I made this little card that sits on my screen and tells me what's playing.
 
-![The Now Playing card showing a song with its album cover, title, artist and progress bar](docs/preview.png)
+![The Now Playing card floating in the top-right corner of a Mac desktop, showing a song with its album cover, title, artist and progress bar](docs/preview.png)
 
 The card stays on top of your other windows and appears on every desktop. Its background is a blurred copy of the album cover, and the progress bar and equalizer take their colour from the cover.
 
@@ -39,6 +39,8 @@ The card appears in the top-right corner of your screen. The first time it runs,
 After that, you can open it from Spotlight by typing "Now Playing".
 
 ## How to use it
+
+<img src="docs/controls.png" width="400" alt="The card while hovering, with previous, pause and next buttons and an X in the top-left corner">
 
 Hover over the card to show the previous, play/pause and next buttons. Click or drag the progress bar to jump within a song, and click the album cover to open the music app.
 
